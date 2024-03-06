@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.zhourui</groupId>
+    <artifactId>apifirst-demo</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>API first Demo</name>
+    <description>API first Demo</description>
+
+    <!-- Defining metadata which will get added to the 'site' -->
+    <organization>
+        <name>Example, Inc</name>
+        <url>https://google.com/search?q=example.com</url>
+    </organization>
+    <prerequisites>
+        <maven>3.5.0</maven>
+    </prerequisites>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <openapi-generator.version>7.3.0</openapi-generator.version>
+    </properties>
+
+    <dependencies>
+    </dependencies>
+
+    <build>
+        <!-- Pin the version of the plugins we are using -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.zhourui</groupId>
+                    <artifactId>apifirst-maven-plugin</artifactId>
+                    <version>1.0</version>
+                </plugin>                
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
