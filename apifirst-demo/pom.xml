@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
     <groupId>com.zhourui</groupId>
     <artifactId>apifirst-demo</artifactId>
     <version>1.0</version>
@@ -14,8 +21,8 @@
 
     <!-- Defining metadata which will get added to the 'site' -->
     <organization>
-        <name>Example, Inc</name>
-        <url>https://google.com/search?q=example.com</url>
+        <name>API first Demo</name>
+        <url>https://www.google.com/search?q=api+first</url>
     </organization>
     <prerequisites>
         <maven>3.5.0</maven>
@@ -27,21 +34,129 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <openapi-generator.version>7.3.0</openapi-generator.version>
+        <spring-boot-maven-plugin.version>3.2.3</spring-boot-maven-plugin.version>
+        <jackson-version>2.15.2</jackson-version>
+        <jackson-databind-version>2.15.2</jackson-databind-version>
+        <jackson-databind-nullable-version>0.2.6</jackson-databind-nullable-version>
+
+        <jakarta-annotation.version>2.1.1</jakarta-annotation.version>
+        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+
+        <swagger-annotations.version>2.2.20</swagger-annotations.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+<!--        openapi-->
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta-annotation-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta.validation-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger-annotations.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <!-- Pin the version of the plugins we are using -->
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.zhourui</groupId>
-                    <artifactId>apifirst-maven-plugin</artifactId>
-                    <version>1.0</version>
-                </plugin>                
-            </plugins>
-        </pluginManagement>
+        <plugins>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>petstore-client</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+<!--                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>-->
+                            <auth></auth>
+                            <inputSpec>https://raw.githubusercontent.com/softarts/apifirst/main/apifirst-contracts/retail/petstore/v1.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+<!--                            <generateSupportingFiles>false</generateSupportingFiles>-->
+                            <configOptions>
+<!--                                <sourceFolder>src/gen/java/main</sourceFolder>-->
+                                <interfaceOnly>true</interfaceOnly>
+                                <dateLibrary>java8</dateLibrary>
+                                <delegatePattern>true</delegatePattern>
+                                <useTags>true</useTags>
+                                <requestMappingMode>api_interface</requestMappingMode>
+                                <library>resttemplate</library>
+                                <generateClientAsBean>true</generateClientAsBean>
+                                <useSpringBoot3>true></useSpringBoot3>
+                                <useJakartaEe>true</useJakartaEe>
+                                <apiPackage>com.zhourui.retail.petstore.consumer.api.v1</apiPackage>
+                                <modelPackage>com.zhourui.retail.petstore.model.v1</modelPackage>
+                                <serializableModel>true</serializableModel>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>petstore-server</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!--                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>-->
+                            <auth></auth>
+                            <inputSpec>https://raw.githubusercontent.com/softarts/apifirst/main/apifirst-contracts/retail/petstore/v1.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                            <configOptions>
+                                <!--                                <sourceFolder>src/gen/java/main</sourceFolder>-->
+                                <validateSpec>false</validateSpec>
+                                <interfaceOnly>true</interfaceOnly>
+                                <dateLibrary>java8</dateLibrary>
+                                <delegatePattern>false</delegatePattern>
+    S                            <requestMappingMode>api_interface</requestMappingMode>
+                                <generateClientAsBean>true</generateClientAsBean>
+                                <useSpringBoot3>true></useSpringBoot3>
+                                <useJakartaEe>true</useJakartaEe>
+                                <apiPackage>com.zhourui.retail.petstore.producer.api.v1</apiPackage>
+                                <modelPackage>com.zhourui.retail.petstore.model.v1</modelPackage>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
